@@ -1,0 +1,21 @@
+::ng-deep span.ant-breadcrumb-separator.ng-star-inserted {
+    color: #fff;
+}
+
+::ng-deep .ant-picker-date-panel .ant-picker-content th, ::ng-deep .ant-picker-cell .ant-picker-cell-inner {
+    color: #fff;
+}
+
+::ng-deep .ant-picker-cell .ant-picker-cell-inner:hover {
+    color: #001529;
+}
+
+//Others
+.white-bold {
+    font-weight: bold;
+    color: #fff !important;
+}
+
+::ng-deep .ant-form-item-label > label {
+    color: #fff;
+}

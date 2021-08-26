@@ -1,0 +1,88 @@
+::ng-deep span.ant-breadcrumb-separator.ng-star-inserted {
+    color: #fff;
+}
+
+//Greetings Card
+.greeting-card {
+    text-align: center; 
+    background: #0066b2; 
+    padding: 30px 0px;
+    .greeting-text {
+        color: #fff;
+        overflow: hidden;
+        border-right: .15em solid #fff;
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: .15em;
+        animation: typing 4s steps(21),
+                   blink .75s step-end infinite alternate;
+        width: 28ch;
+        font-size: 2em;
+        font-family: monospace;
+    }
+}
+
+@keyframes typing {
+    from {
+      width: 0
+    }
+  }
+
+@keyframes blink {
+    50% {
+      border-color: transparent
+    }
+  }
+
+//Drawer
+::ng-deep .ant-list-item-meta-description {
+  color: turquoise;
+  font-style: italic;
+  font-weight: bold;
+}
+
+::ng-deep p.ng-star-inserted{
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: none;
+}
+
+::ng-deep nz-list-item-meta-avatar.ng-star-inserted {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.ongoing-consultation {
+  overflow-y: scroll;
+  height: auto;
+}
+
+.ongoing-consultation::-webkit-scrollbar, ::ng-deep .ant-drawer-body::-webkit-scrollbar {
+  display: none;
+}
+
+::ng-deep .ant-drawer-body{
+  background: #0C2340;
+  overflow-y: scroll
+}
+
+::ng-deep span.ant-descriptions-item-label {
+  font-size: 16px;
+}
+
+::ng-deep .ant-descriptions-title.ng-star-inserted {
+  color: #000;
+  font-size: 20px;
+}
+
+//Others
+.white-bold {
+  font-weight: bold;
+  color: #fff;
+}
+
+.black-bold, ::ng-deep h5.ng-star-inserted {
+  font-weight: bold;
+  color: #000;
+  font-size: 16px;
+}

@@ -1,0 +1,47 @@
+<div style="height: 100vh; padding-top: 150px; margin: auto; overflow: hidden; position: relative;">
+    <img nz-image nzSrc="../../assets/images/consultation.jpg" alt="login.jpg" class="login-bg" />
+    <div class="form-content">
+        <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitForm()" novalidate>
+            <h1 style="color: #fff">H4U Admin Login</h1>
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Please input your username!">
+                    <nz-input-group nzPrefixIcon="user">
+                        <input type="text" nz-input formControlName="username" placeholder="Username" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Please input your Password!">
+                    <nz-input-group nzPrefixIcon="lock">
+                        <input type="password" nz-input formControlName="password" placeholder="Password" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Please Select your Role!">
+                    <nz-input-group>
+                        <nz-select formControlName="role" nzShowSearch nzPlaceHolder="Choose Your Role" nzAllowClear
+                            style="width:100%; resize: none;">
+                            <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+                            <nz-option nzValue="consultor" nzLabel="Consultor"></nz-option>
+                            <nz-option nzValue="user" nzLabel="User"></nz-option>
+                        </nz-select>
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-row class="login-form-margin">
+                <div nz-col [nzSpan]="12">
+                    <label nz-checkbox>
+                        <span style="color: #fff; font-weight: bold;">Remember me</span>
+                    </label>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <a style="color: #fff; font-weight: bold;" routerLink="/forgot-password"
+                        class="login-form-forgot">Forgot Password</a>
+                </div>
+            </div>
+            <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+                [disabled]="loginForm.invalid">Log in</button>
+        </form>
+    </div>
+</div>

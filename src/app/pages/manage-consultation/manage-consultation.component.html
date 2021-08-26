@@ -1,0 +1,390 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Manage Consultation</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">View, Update and Delete Consultation' Info</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span style="color: #fff;">Manage Consultation</span>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff;"></nz-divider>
+
+<div nz-row>
+    <div nz-col nzSpan="22"
+        style="margin: auto; border: 2px solid #fff; padding: 20px 20px 0px 20px; margin-bottom: 10px;">
+        <div style="float: left; margin-bottom: 15px; display: flex;">
+            <a nz-button routerLink="add-consultation" nzType="primary">
+                ADD NEW CONSULTATION <i nz-icon nzType="plus" nzTheme="outline"></i>
+            </a>
+            <div style="margin-left: 5px;">
+                <a nz-button nzType="primary" (click)="reloadTable()">
+                    REFRESH TABLE <i nz-icon nzType="reload" nzTheme="outline"></i>
+                </a>
+            </div>
+        </div>
+        <nz-table #nzTable [nzData]="listOfDisplayData" [nzLoading]="isLoading" [nzPageSize]="pageSize"
+            [nzFrontPagination]="false" [nzSize]="'small'" [nzTotal]="total" [nzFooter]="'Total records: '+total"
+            nzShowSizeChanger nzBordered nzTableLayout="fixed" (nzQueryParams)="onQueryParamsChange($event)">
+            <thead>
+                <tr>
+                    <th nzWidth="5%">
+                        ID
+                    </th>
+                    <th nzWidth="20%" nzCustomFilter>
+                        Consultor
+                        <nz-filter-trigger [(nzVisible)]="consultorSearchVisible"
+                            [nzActive]="searchConsultorValue.length > 0" [nzDropdownMenu]="consultorSearchMenu">
+                            <i nz-icon nzType="search" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="20%" nzCustomFilter>
+                        Consultee
+                        <nz-filter-trigger [(nzVisible)]="consulteeSearchVisible"
+                            [nzActive]="searchConsulteeValue.length > 0" [nzDropdownMenu]="consulteeSearchMenu">
+                            <i nz-icon nzType="search" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="25%" nzCustomFilter>
+                        Type
+                        <nz-filter-trigger [(nzVisible)]="typeSearchVisible" [nzActive]="searchTypeValue.length > 0"
+                            [nzDropdownMenu]="typeSearchMenu">
+                            <i nz-icon nzType="filter" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="15%" nzCustomFilter>
+                        Platform
+                        <nz-filter-trigger [(nzVisible)]="platformSearchVisible"
+                            [nzActive]="searchPlatformValue.length > 0" [nzDropdownMenu]="platformSearchMenu">
+                            <i nz-icon nzType="filter" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="15%" nzCustomFilter>
+                        Status
+                        <nz-filter-trigger [(nzVisible)]="statusSearchVisible" [nzActive]="searchStatusValue.length > 0"
+                            [nzDropdownMenu]="statusSearchMenu">
+                            <i nz-icon nzType="filter" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let consultation of nzTable.data; let i = index" style="cursor: pointer;"
+                    (click)="showOptions(i+1)">
+                    <!--Problem = check interface, service-->
+                    <td>{{ consultation.consultation_id }}</td>
+                    <td>{{ consultation.consultation_consultor }}</td>
+                    <td>{{ consultation.consultation_consultee }}</td>
+                    <td>{{ consultation.consultation_type }}</td>
+                    <td>{{ consultation.consultation_platform }}</td>
+                    <td>{{ consultation.consultation_status }}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <nz-dropdown-menu #consultorSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <input type="text" nz-input placeholder="Search Consultor" [(ngModel)]="searchConsultorValue" />
+                    <button nz-button nzSize="small" nzType="primary" (click)="searchConsultor()"
+                        class="search-button">Search</button>
+                    <button nz-button nzSize="small" (click)="resetConsultor()">Reset</button>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #consulteeSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <input type="text" nz-input placeholder="Search Consultee" [(ngModel)]="searchConsulteeValue" />
+                    <button nz-button nzSize="small" nzType="primary" (click)="searchConsultee()"
+                        class="search-button">Search</button>
+                    <button nz-button nzSize="small" (click)="resetConsultee()">Reset</button>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #typeSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <nz-radio-group [(ngModel)]="searchTypeValue">
+                        <label nz-radio nzValue="Mental Health" (click)="searchType()">Mental Health</label>
+                        <label nz-radio nzValue="Further Studies" (click)="searchType()">Further Studies</label>
+                        <label nz-radio nzValue="Academic" (click)="searchType()">Academic</label>
+                        <label nz-radio nzValue="Fitness" (click)="searchType()">Fitness</label>
+                        <label nz-radio nzValue="Life" (click)="searchType()">Life</label>
+                        <label nz-radio nzValue="Career" (click)="searchType()">Career</label>
+                    </nz-radio-group>
+                    <div style="margin: 10px 0px 5px 7px">
+                        <button nz-button nzType="primary" nzSize="small" (click)="resetPlatform()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #platformSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <nz-radio-group [(ngModel)]="searchPlatformValue">
+                        <label nz-radio nzValue="discord" (click)="searchPlatform()">Discord</label>
+                        <label nz-radio nzValue="teams" (click)="searchPlatform()">Teams</label>
+                        <label nz-radio nzValue="zoom" (click)="searchPlatform()">Zoom</label>
+                    </nz-radio-group>
+                    <div style="margin: 10px 0px 5px 7px">
+                        <button nz-button nzType="primary" nzSize="small" (click)="resetPlatform()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #statusSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <nz-radio-group [(ngModel)]="searchStatusValue">
+                        <label nz-radio nzValue="completed" (click)="searchStatus()">Completed</label>
+                        <label nz-radio nzValue="ongoing" (click)="searchStatus()">Ongoing</label>
+                    </nz-radio-group>
+                    <div style="margin: 10px 0px 5px 7px">
+                        <button nz-button nzType="primary" nzSize="small" (click)="resetStatus()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+    </div>
+</div>
+
+<!--Consultation Info Modal-->
+<nz-modal [(nzVisible)]="infoModalVisible" nzTitle="Consultation Info" nzWidth="1000px" [nzFooter]="infoModalFooter"
+    [nzClosable]="false">
+    <ng-template #infoModalFooter>
+        <ng-container>
+            <button nz-button nzType="primary" nz-popconfirm 
+                nzPopconfirmTitle="Save Unsaved Changes? If Unchanged, Select 'No'."
+                (nzOnConfirm)="onUpdateConsultationInfo()"
+                (nzOnCancel)="closeInfoModal()"
+                nzOkText="Yes"
+                nzCancelText="No">
+                Ok
+            </button>
+        </ng-container>
+    </ng-template>
+    <ng-container *nzModalContent>
+        <ng-container *ngIf="consultationInfo?.readMode; else editCInfo">
+            <nz-tag nzColor="default" style="margin-bottom: 10px;">
+                <i nz-icon nzType="read" nzTheme="outline"></i>
+                <span>Read Mode</span>
+            </nz-tag>
+        </ng-container>
+        <ng-template #editCInfo>
+            <nz-tag nzColor="processing" style="margin-bottom: 10px;">
+                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                <span>Edit Mode</span>
+            </nz-tag>
+        </ng-template>
+        <div nz-row style="background: #001529; padding-top: 10px; color: #fff;">
+            <div nz-col nzSpan="22" style="margin: auto;">
+                <ng-container [formGroup]="consultationInfo.form">
+                    <!--Date & Time-->
+                    <div nz-col nzSpan="24" style="display: flex;">
+                        <div nz-col nzSpan="12">
+                            <nz-form-item>
+                                <nz-form-label nz-col nzSpan="24" nzFor="date" class="white-bold">
+                                    Date
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="dErrorTpl">
+                                    <nz-input-group>
+                                        <nz-date-picker formControlName="date" nzPlaceHolder="Input Date"
+                                            [nzFormat]="dateFormat" style="width:100%">
+                                        </nz-date-picker>
+                                    </nz-input-group>
+                                    <ng-template #dErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Select a Date
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="1"></div>
+                        <div nz-col nzSpan="11">
+                            <nz-form-item>
+                                <nz-form-label nzFor="time" nz-col nzSpan="24" class="white-bold">
+                                    Time
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="tErrorTpl">
+                                    <input nz-input type="text" formControlName="time"
+                                        placeholder="Input Time (HH:mm:ss)"/>
+                                    <ng-template #tErrorTpl let-control>
+                                        Please Choose a Time!
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!--Consultor & Consultee-->
+                    <div nz-col nzSpan="24" style="display: flex;">
+                        <div nz-col nzSpan="12">
+                            <nz-form-item>
+                                <nz-form-label nzFor="consultor" nz-col nzSpan="24">
+                                    Consultor
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="ctorErrorTpl">
+                                    <input nz-input type="text" formControlName="consultor"
+                                        placeholder="Input Consultor" />
+                                    <ng-template #ctorErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Input Consultor's Name!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="1"></div>
+                        <div nz-col nzSpan="11">
+                            <nz-form-item>
+                                <nz-form-label nzFor="consultee" nz-col nzSpan="24">
+                                    Consultee
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="cteeErrorTpl">
+                                    <input nz-input type="text" formControlName="consultee"
+                                        placeholder="Input Consultee" />
+                                    <ng-template #cteeErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Input Consultee's Name!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!--Type, Platform, Status-->
+                    <div nz-col nzSpan="24" style="display: flex;">
+                        <div nz-col nzSpan="8">
+                            <nz-form-item>
+                                <nz-form-label nzFor="type" nz-col nzSpan="24" class="white-bold">
+                                    Type
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="typeErrorTpl">
+                                    <nz-input-group>
+                                        <nz-select formControlName="type" nzShowSearch nzPlaceHolder="Choose Your Type"
+                                            nzAllowClear style="width:100%; resize: none;">
+                                            <nz-option nzValue="Mental Health" nzLabel="Mental Health"></nz-option>
+                                            <nz-option nzValue="Fitness" nzLabel="Fitness"></nz-option>
+                                            <nz-option nzValue="Academic" nzLabel="Academic"></nz-option>
+                                            <nz-option nzValue="Life" nzLabel="Life"></nz-option>
+                                            <nz-option nzValue="Career" nzLabel="Career"></nz-option>
+                                            <nz-option nzValue="Further Studies" nzLabel="Further Studies"></nz-option>
+                                        </nz-select>
+                                    </nz-input-group>
+                                    <ng-template #typeErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Select A Type!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="1"></div>
+                        <div nz-col nzSpan="7">
+                            <nz-form-item>
+                                <nz-form-label nzFor="platform" nz-col nzSpan="24" class="white-bold">
+                                    Platform
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="pErrorTpl">
+                                    <nz-input-group>
+                                        <nz-select formControlName="platform" nzShowSearch
+                                            nzPlaceHolder="Choose Platform" nzAllowClear
+                                            style="width:100%; resize: none;">
+                                            <nz-option nzValue="discord" nzLabel="Discord"></nz-option>
+                                            <nz-option nzValue="teams" nzLabel="Teans"></nz-option>
+                                            <nz-option nzValue="zoom" nzLabel="Zoom"></nz-option>
+                                        </nz-select>
+                                    </nz-input-group>
+                                    <ng-template #pErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Select A Platform!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="1"></div>
+                        <div nz-col nzSpan="7">
+                            <nz-form-item>
+                                <nz-form-label nzFor="status" nz-col nzSpan="24" class="white-bold">
+                                    Status
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="statusErrorTpl">
+                                    <nz-input-group>
+                                        <nz-select formControlName="status" nzShowSearch nzPlaceHolder="Choose Status"
+                                            nzAllowClear style="width:100%; resize: none;">
+                                            <nz-option nzValue="completed" nzLabel="Completed"></nz-option>
+                                            <nz-option nzValue="ongoing" nzLabel="Ongoing"></nz-option>
+                                        </nz-select>
+                                    </nz-input-group>
+                                    <ng-template #statusErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Select A Status!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <!--Comment-->
+                    <div nz-col nzSpan="24">
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label nzFor="comment" nz-col nzSpan="24">
+                                    Comment
+                                </nz-form-label>
+                                <nz-form-control nzHasFeedback [nzErrorTip]="comErrorTpl">
+                                    <textarea nz-input formControlName="comment" placeHolder="Input Comment"
+                                        [nzAutosize]="{ minRows: 5, maxRows: 10 }" style="resize: none;">
+                                </textarea>
+                                    <ng-template #comErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                            Please Input Comment!
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-col nzSpan="24" style="margin-bottom: 20px; float: right;">
+                        <ng-container *ngIf="consultationInfo?.readMode; else saveCInfo">
+                            <button nz-button nzType="primary" (click)="changeFormState('cInfo')">
+                                <span>
+                                    EDIT CONSULTATION INFO <i nz-icon nzType="form" nzTheme="outline"></i>
+                                </span>
+                            </button>
+                        </ng-container>
+                        <ng-template #saveCInfo>
+                            <ng-container>
+                                <button nz-button nzType="text" (click)="changeFormState('cInfo')" style="border: .5px solid #fff;">
+                                    <span style="color: #fff;">
+                                        CANCEL <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </span>
+                                </button>
+                                <nz-divider nzType="vertical" style="border-left-color: #fff; height: 3vh;
+                                    margin: 0px 15px;">
+                                </nz-divider>
+                                <button nz-button nzType="primary" [disabled]="!consultationInfo.form.valid" 
+                                    [nzLoading]="isUpdatingConsultationInfo" (click)="onUpdateConsultationInfo()">
+                                        <span> 
+                                            UPDATE USER INFO <i nz-icon nzType="save" nzTheme="outline"></i>
+                                        </span>
+                                </button>
+                            </ng-container>
+                        </ng-template>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</nz-modal>

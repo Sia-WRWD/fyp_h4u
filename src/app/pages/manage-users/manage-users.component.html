@@ -1,0 +1,135 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Manage Users</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">View, Update and Delete Users' Info</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span style="color: #fff;">Manage Users</span>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff;"></nz-divider>
+
+<div nz-row>
+    <div nz-col nzSpan="22"
+        style="margin: auto; border: 2px solid #fff; padding: 20px 20px 0px 20px; margin-bottom: 10px;">
+        <div style="float: left; margin-bottom: 15px; display: flex;">
+            <a nz-button routerLink="register-users" nzType="primary">
+                ADD NEW USERS <i nz-icon nzType="plus" nzTheme="outline"></i>
+            </a>
+            <div style="margin-left: 5px;">
+                <a nz-button nzType="primary" (click)="reloadTable()">
+                    REFRESH TABLE <i nz-icon nzType="reload" nzTheme="outline"></i>
+                </a>
+            </div>
+        </div>
+        <nz-table #nzTable [nzData]="listOfDisplayData" [nzLoading]="isLoading" [nzPageSize]="pageSize"
+            [nzFrontPagination]="false" [nzSize]="'small'" [nzTotal]="total" [nzFooter]="'Total records: '+total"
+            nzShowSizeChanger nzBordered nzTableLayout="fixed" (nzQueryParams)="onQueryParamsChange($event)">
+            <thead>
+                <tr>
+                    <th nzWidth="5%">
+                        ID
+                    </th>
+                    <th nzWidth="35%" nzCustomFilter>
+                        Username
+                        <nz-filter-trigger [(nzVisible)]="usernameSearchVisible"
+                            [nzActive]="searchUsernameValue.length > 0" [nzDropdownMenu]="usernameSearchMenu">
+                            <i nz-icon nzType="search" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="25%">Email</th>
+                    <th nzWidth="15%" nzCustomFilter>
+                        Role
+                        <nz-filter-trigger [(nzVisible)]="roleSearchVisible" [nzActive]="searchRoleValue.length > 0"
+                            [nzDropdownMenu]="roleSearchMenu">
+                            <i nz-icon nzType="filter" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                    <th nzWidth="20%" nzCustomFilter>
+                        State
+                        <nz-filter-trigger [(nzVisible)]="stateSearchVisible" [nzActive]="searchStateValue.length > 0"
+                            [nzDropdownMenu]="stateSearchMenu">
+                            <i nz-icon nzType="filter" class="filter-btn"></i>
+                        </nz-filter-trigger>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of nzTable.data; let i = index" style="cursor: pointer;"
+                    (click)="showOptions(i+1)">
+                    <!--Problem = check interface, service-->
+                    <td>{{ user.user_id }}</td>
+                    <td>{{ user.user_username }}</td>
+                    <td>{{ user.user_email }}</td>
+                    <td>{{ user.user_role }}</td>
+                    <td>{{ user.user_state }}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <nz-dropdown-menu #usernameSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchUsernameValue" />
+                    <button nz-button nzSize="small" nzType="primary" (click)="searchUsername()"
+                        class="search-button">Search</button>
+                    <button nz-button nzSize="small" (click)="resetUsername()">Reset</button>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #roleSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <nz-radio-group [(ngModel)]="searchRoleValue">
+                        <label nz-radio nzValue="user" (click)="searchRole()">User</label>
+                        <label nz-radio nzValue="admin" (click)="searchRole()">Admin</label>
+                        <label nz-radio nzValue="consultor" (click)="searchRole()">Consultor</label>
+                    </nz-radio-group>
+                    <div style="margin: 10px 0px 5px 7px">
+                        <button nz-button nzType="primary" nzSize="small" (click)="resetRole()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+        <nz-dropdown-menu #stateSearchMenu="nzDropdownMenu">
+            <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                    <nz-radio-group [(ngModel)]="searchStateValue">
+                        <label nz-radio nzValue="Kuala Lumpur" (click)="searchState()">Kuala Lumpur</label>
+                        <label nz-radio nzValue="Selangor" (click)="searchState()">Selangor</label>
+                        <label nz-radio nzValue="Sabah" (click)="searchState()">Sabah</label>
+                        <label nz-radio nzValue="Sarawak" (click)="searchState()">Sarawak</label>
+                        <label nz-radio nzValue="Johor" (click)="searchState()">Johor</label>
+                        <label nz-radio nzValue="Kedah" (click)="searchState()">Kedah</label>
+                        <label nz-radio nzValue="Negeri Sembilan" (click)="searchState()">Negeri Sembilan</label>
+                        <label nz-radio nzValue="Penang" (click)="searchState()">Penang</label>
+                        <label nz-radio nzValue="Pahang" (click)="searchState()">Pahang</label>
+                        <label nz-radio nzValue="Perlis" (click)="searchState()">Perlis</label>
+                        <label nz-radio nzValue="Kelantan" (click)="searchState()">Kelantan</label>
+                        <label nz-radio nzValue="Terengganu" (click)="searchState()">Terengganu</label>
+                        <label nz-radio nzValue="Malacca" (click)="searchState()">Malacca</label>
+                    </nz-radio-group>
+                    <div style="margin: 10px 0px 5px 7px">
+                        <button nz-button nzType="primary" nzSize="small" (click)="resetState()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </nz-dropdown-menu>
+    </div>
+</div>
+
+<!-- <nz-modal [(nzVisible)]="infoModalVisible" nzTitle="Consultation Info" nzWidth="1000px" (nzOnOk)="closeInfoModal()" nzOkText="Save">
+    <ng-container *nzModalContent>
+        <app-info-users></app-info-users>
+    </ng-container>
+</nz-modal> -->

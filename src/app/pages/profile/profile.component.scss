@@ -1,0 +1,100 @@
+//BreadCrumb
+span.ant-breadcrumb-separator.ng-star-inserted {
+    color: #fff;
+}
+
+//Edit Username
+.flex {
+    display: flex;
+}
+
+.startEditBtn:disabled {
+    &:disabled {
+        background: transparent;
+        cursor: default;
+    }
+}
+
+.editUnameInput {
+    width: 250px;
+    height: 35px;
+}
+
+//Tabs
+::ng-deep .ant-tabs-tab-btn {
+    color: #fff;
+    opacity: 0.5;
+}
+
+::ng-deep .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    opacity: 1;
+    font-weight: bold;
+}
+
+
+//Info-Tab
+.info {
+    align-items: center; 
+    text-align: left;   
+    display: inline-block;
+    overflow-y: scroll; 
+    height: 60vh;
+}
+
+.info::-webkit-scrollbar, .left-side::-webkit-scrollbar, .edit::-webkit-scrollbar {
+    display: none;
+}
+
+::ng-deep .ant-back-top-content {
+    color: black;
+    background: #fff;
+    opacity: 0.5;
+    &:hover {
+        opacity: 1.0;
+        background:radial-gradient(#002D62,#00308F,#13274F, aqua, pink);
+        color:aqua;
+        transition: 0.2s ease-in;
+    }
+}
+
+::ng-deep .info .ant-back-top {
+    bottom: 40px;
+    right: 60px;
+}
+
+.left-side {
+    display: inline-block; 
+    text-align: center; 
+    margin-top: 30px; 
+    overflow-y: scroll; 
+    height: 55vh;
+}
+
+//Edit-Tab
+.edit {
+    align-items: center; 
+    text-align: left;   
+    overflow-y: scroll; 
+    height: 50vh;
+    margin: auto;
+}
+
+::ng-deep .edit .ant-back-top {
+    bottom: 75px;
+    left: 845px;
+}
+
+//Text Colors
+.white-bold {
+    font-weight: bold;
+    color: #fff !important;
+}
+
+//Other Stuffs
+::ng-deep .ant-form-item-label > label {
+    color: #fff;
+}
+
+::ng-deep span.ant-breadcrumb-separator.ng-star-inserted {
+    color: #fff;
+}

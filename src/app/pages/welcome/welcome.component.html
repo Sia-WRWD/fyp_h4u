@@ -1,0 +1,60 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+        [nzTrigger]="null">
+        <div class="sidebar-logo">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+                <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+                <h1>H4U Consultation</h1>
+            </a>
+        </div>
+        <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+            <li nz-submenu nzOpen nzTitle="Home" nzIcon="home">
+                <ul>
+                    <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/welcome/dashboard">Dashboard <i nz-icon nzType="dashboard"
+                                nzTheme="outline"></i></a>
+                    </li>
+                </ul>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Management" nzIcon="form">
+                <ul>
+                    <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/welcome/manage-users">Manage Users <i nz-icon nzType="user-add"
+                                nzTheme="outline"></i></a>
+                    </li>
+                    <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/welcome/manage-consultation">Manage Consultation <i nz-icon nzType="read"
+                                nzTheme="outline"></i></a>
+                    </li>
+                </ul>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Account" nzIcon="user">
+                <ul>
+                    <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/welcome/settings">Settings <i nz-icon nzType="setting"
+                                nzTheme="outline"></i></a>
+                    </li>
+                </ul>
+            </li>
+            <li nz-submenu nzTitle="Log Out" nzIcon="logout" routerLink="/login"></li>
+        </ul>
+    </nz-sider>
+    <nz-layout>
+        <nz-header>
+            <div class="app-header">
+                <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+                    <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+                </span>
+                <span style="float: right; margin-right: 25px; cursor: pointer;">
+                    <nz-avatar routerLink="/welcome/profile" nzIcon="user"
+                        nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+                </span>
+            </div>
+        </nz-header>
+        <nz-content>
+            <div class="inner-content">
+                <router-outlet></router-outlet>
+            </div>
+        </nz-content>
+    </nz-layout>
+</nz-layout>

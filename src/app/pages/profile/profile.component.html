@@ -1,0 +1,555 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Profile</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">View and Edit Your Profile Information.</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span>Profile</span>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <ng-container *ngIf="basicInfoData[0].username == null  || ''; else showTopUsername">
+                            <span style="cursor: pointer; color: #fff;" (click)="startEditUsername()">
+                                New Username
+                            </span>
+                        </ng-container>
+                        <ng-template #showTopUsername>
+                            <span style="cursor: default; color: #fff;">
+                                {{basicInfoData[0].username}}
+                            </span>
+                        </ng-template>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff;"></nz-divider>
+
+<!--Profile Page Content-->
+<div nz-row style="padding-left: 25px; display: flex;">
+    <!--Left-side Content-->
+    <div nz-col nzSpan="10" class="left-side">
+        <!--Profile Image-->
+        <div nz-col nzSpan="24" style="margin-bottom: 25px;">
+            <img nz-image width="200px" height="200px" nzIcon="user" style="border-radius: 50%;"
+                nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
+        </div>
+
+        <!--Upload & Update Profile Image Button-->
+        <div nz-col nzSpan="24" style="margin-bottom: 15px;">
+            <ng-container *ngIf="fileList.length === 0; else showUpdateBtn">
+                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" nzListType="picture">
+                    <button nz-button>Upload File <i nz-icon nzType="upload"></i></button>
+                </nz-upload>
+            </ng-container>
+            <ng-template #showUpdateBtn>
+                <button nz-button [nzType]="'primary'" [nzLoading]="isUploading" (click)="handleUpload()">
+                    Update Profile
+                </button>
+                <ng-container>
+                    <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" nzListType="picture">
+                    </nz-upload>
+                </ng-container>
+            </ng-template>
+        </div>
+
+        <!--Edit Username-->
+        <div nz-col nzSpan="24" style="display: inline-flex; text-align: center; align-items: baseline;">
+            <ng-container *ngIf="!isEditingUsername; else editUnameTemplate">
+                <ng-container *ngIf="basicInfoData[0].username == null || ''; else showBotUsername">
+                    <h1 style="color: #fff; font-weight: bold; font-size: 35px;">New Username</h1>
+                </ng-container>
+                <ng-template #showBotUsername>
+                    <h1 style="color: #fff; font-weight: bold; font-size: 35px; cursor: default;">
+                        {{basicInfoData[0].username}}
+                    </h1>
+                </ng-template>
+                <ng-container *ngIf="basicInfoData[0].username == null || ''; else disableEditButton">
+                    <button nz-button (click)="startEditUsername()"
+                        style="border: none; background: transparent; color: #fff;">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </button>
+                </ng-container>
+                <ng-template #disableEditButton>
+                    <ng-container>
+                        <button nz-button (click)="startEditUsername()" style="display: none;">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                    </ng-container>
+                </ng-template>
+            </ng-container>
+            <ng-template #editUnameTemplate>
+                <ng-container [formGroup]="editUsernameForm">
+                    <div style="display: inline-flex; text-align: left; align-items: baseline;">
+                        <nz-form-item style="margin-right: 5px;">
+                            <nz-form-control [nzErrorTip]="euErrorTpl">
+                                <input nz-input placeholder="Input New Username" formControlName="username"
+                                    class="editUnameInput" />
+                            </nz-form-control>
+                            <ng-template #euErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Username!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-item>
+                        <button nz-button class="startEditBtn" (click)="cancelEditUsername()"
+                            style="border: none; background: transparent; box-shadow: none; color: #fff;">
+                            <i nz-icon nzType="close" nzTheme="outline"></i>
+                        </button>
+                        <nz-divider nzType="vertical" style="border-top-color: #fff;"></nz-divider>
+                        <button nz-button class="startEditBtn" (click)="onEditUsername()"
+                            style="border: none; background: transparent; box-shadow: none; color: #fff;"
+                            [disabled]="!editUsernameForm.valid">
+                            <i nz-icon nzType="save" nzTheme="outline"></i>
+                        </button>
+                    </div>
+                </ng-container>
+            </ng-template>
+        </div>
+    </div>
+
+    <nz-divider nz-col nzSpan="1" nzType="vertical" style="height: 68vh; margin-top: 3px; 
+        border-left-color: #fff;">
+    </nz-divider>
+
+    <!--Right-side Content-->
+
+    <div nz-col nzSpan="12" style="text-align: center;" class="right-side">
+        <div nz-col nzSpan="24">
+            <nz-tabset [nzSelectedIndex]="selectedIndex" (nzSelectedIndexChange)="selectedIndexChange($event)">
+
+                <!--Info Tab-->
+                <nz-tab [nzTitle]="infoTab">
+                    <ng-template #infoTab>
+                        <ng-container>
+                            <i nz-icon nzType="info-circle" nzTheme="outline"></i>Info
+                        </ng-container>
+                    </ng-template>
+
+                    <div nz-col nzSpan="24" class="info" #backTopTarget>
+                        <!--Basic Info-->
+                        <div nz-col nzSpan="24">
+                            <nz-descriptions [nzTitle]="basicInfoTitle" nzBordered nzLayout="vertical"
+                                style="width:400px; cursor: default; margin: auto;">
+                                <ng-template #basicInfoTitle>
+                                    <ng-container>
+                                        <span style="color:#fff;">
+                                            Basic Info <i nz-icon nzType="user" nzTheme="outline"></i>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
+                                <nz-descriptions-item nzTitle="Name" [nzSpan]="4">
+                                    <ng-container *ngIf="basicInfoData[0].first_name == null || ''; else checkLastName">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #checkLastName>
+                                        <ng-container *ngIf="basicInfoData[0].last_name == null || ''; else showName">
+                                            <a class="white-bold" (click)="directEditTab()">
+                                                Not Provided.
+                                            </a>
+                                        </ng-container>
+                                        <ng-template #showName>
+                                            <ng-container>
+                                                <span class="white-bold">
+                                                    {{basicInfoData[0].first_name}} {{basicInfoData[0].last_name}}
+                                                </span>
+                                            </ng-container>
+                                        </ng-template>
+                                    </ng-template>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item nzTitle="Gender" [nzSpan]="2">
+                                    <ng-container *ngIf="basicInfoData[0].gender == null || ''; else showOthers">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #showOthers>
+                                        <ng-container *ngIf="basicInfoData[0].gender == 'o'; else showMale">
+                                            <span class="white-bold">
+                                                Others
+                                            </span>
+                                        </ng-container>
+                                        <ng-template #showMale>
+                                            <ng-container *ngIf="basicInfoData[0].gender == 'm'; else showFemale">
+                                                <span class="white-bold">
+                                                    Male
+                                                </span>
+                                            </ng-container>
+                                            <ng-template #showFemale>
+                                                <ng-container>
+                                                    <span class="white-bold">
+                                                        Female
+                                                    </span>
+                                                </ng-container>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ng-template>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item nzTitle="Birthday" [nzSpan]="2">
+                                    <ng-container *ngIf="basicInfoData[0].birthday == null || ''; else showBirthday">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #showBirthday></ng-template>
+                                    <ng-container>
+                                        <span class="white-bold">
+                                            {{basicInfoData[0].birthday | date:"d MMMM yyyy"}}
+                                        </span>
+                                    </ng-container>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
+                        </div>
+
+                        <nz-divider nz-col nzSpan="24" style="width: 80vw; text-align: center; 
+                            margin-bottom: 5px; border-top-color: #fff;">
+                        </nz-divider>
+
+                        <!--Contact Info-->
+                        <div nz-col nzSpan="24" style="text-align: left;">
+                            <nz-descriptions [nzTitle]="contactInfoTitle" nzBordered nzLayout="vertical"
+                                style="width:400px; cursor: default; margin: auto;">
+                                <ng-template #contactInfoTitle>
+                                    <ng-container>
+                                        <span class="white-bold">
+                                            Contact Info <i nz-icon nzType="message" nzTheme="outline"></i>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
+                                <nz-descriptions-item nzTitle="Email" [nzSpan]="2">
+                                    <ng-container *ngIf="contactInfoData[0].email == null || ''; else showEmail">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #showEmail>
+                                        <ng-container>
+                                            <span class="white-bold">
+                                                {{contactInfoData[0].email}}
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item nzTitle="Phone Number" [nzSpan]="2">
+                                    <ng-container
+                                        *ngIf="contactInfoData[0].phone_number == null || ''; else showPhoneNumber">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #showPhoneNumber>
+                                        <ng-container>
+                                            <span class="white-bold">
+                                                (+60) {{contactInfoData[0].phone_number}}
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item nzTitle="Address" [nzSpan]="4">
+                                    <ng-container *ngIf="userAddressData[0].address == null || ''; else checkPostcode">
+                                        <a class="white-bold" (click)="directEditTab()">
+                                            Not Provided.
+                                        </a>
+                                    </ng-container>
+                                    <ng-template #checkPostcode>
+                                        <ng-container *ngIf="userAddressData[0].postcode == null || ''; else checkCity">
+                                            <a class="white-bold" (click)="directEditTab()">
+                                                Not Provided.
+                                            </a>
+                                        </ng-container>
+                                        <ng-template #checkCity>
+                                            <ng-container
+                                                *ngIf="userAddressData[0].city == null || ''; else checkState">
+                                                <a class="white-bold" (click)="directEditTab()">
+                                                    Not Provided.
+                                                </a>
+                                            </ng-container>
+                                            <ng-template #checkState>
+                                                <ng-container
+                                                    *ngIf="userAddressData[0].state == null || ''; else showAddress">
+                                                    <a class="white-bold" (click)="directEditTab()">
+                                                        Not Provided.
+                                                    </a>
+                                                </ng-container>
+                                                <ng-template #showAddress>
+                                                    <ng-container>
+                                                        <span class="white-bold">
+                                                            {{userAddressData[0].address}},
+                                                            {{userAddressData[0].postcode}}
+                                                            {{userAddressData[0].city}}, {{userAddressData[0].state}}.
+                                                        </span>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ng-template>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
+                        </div>
+                        <nz-back-top [nzTarget]="backTopTarget" [nzVisibilityHeight]="100" class="backTopBtn">
+                        </nz-back-top>
+                    </div>
+                </nz-tab>
+                <nz-tab [nzTitle]="editTab">
+                    <ng-template #editTab>
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>Edit
+                    </ng-template>
+                    <!--Edit Form-->
+                    <div nz-col nzSpan="21" #backTopTarget2 class="edit">
+                        <!--Basic-Info Form-->
+                        <div nz-col nzSpan="24">
+                            <h4 class="white-bold" style="font-size: 16px; margin-bottom: 20px;">
+                                User Info <i nz-icon nzType="user" nzTheme="outline"></i>
+                            </h4>
+                        </div>
+                        <nz-card style="background: transparent; border: 2px solid #fff; margin: auto;">
+                            <ng-container [formGroup]="editBasicInfoForm">
+                                <div nz-col nzSpan="24" style="display: flex;">
+                                    <!--First Name-->
+                                    <div nz-col nzSpan="10">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="first_name" class="white-bold">
+                                                First Name
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="fnErrorTpl">
+                                                <input nz-input placeholder="Input First Name"
+                                                    formControlName="first_name" type="text" />
+                                                <ng-template #fnErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your First Name!
+                                                    </ng-container>
+                                                    <ng-container *ngIf="control.hasError('pattern')">
+                                                        Please Input Only Alphabetic Characters and Spaces.
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="1"></div>
+                                    <!--Last Name-->
+                                    <div nz-col nzSpan="13">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="last_name" class="white-bold">
+                                                Last Name
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="lnErrorTpl">
+                                                <input nz-input placeholder="Input Your Last Name"
+                                                    formControlName="last_name" type="text" />
+                                                <ng-template #lnErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your Last Name!
+                                                    </ng-container>
+                                                    <ng-container *ngIf="control.hasError('pattern')">
+                                                        Please Input Only Alphabetic Characters and Spaces.
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <!--Gender-->
+                                <div nz-col nzSpan="24" style="display: flex;">
+                                    <div nz-col nzSpan="11">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="gender" class="white-bold">
+                                                Gender
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="gErrorTpl">
+                                                <nz-input-group>
+                                                    <nz-select formControlName="gender" nzShowSearch
+                                                        nzPlaceHolder="Choose Your Gender" nzAllowClear
+                                                        style="width:100%; resize: none;">
+                                                        <nz-option nzValue="m" nzLabel="Male"></nz-option>
+                                                        <nz-option nzValue="f" nzLabel="Female"></nz-option>
+                                                        <nz-option nzValue="o" nzLabel="Other"></nz-option>
+                                                    </nz-select>
+                                                </nz-input-group>
+                                                <ng-template #gErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Select a Gender
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="1"></div>
+                                    <!-- birthday-->
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="birthday" class="white-bold">
+                                                Birthday
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="bErrorTpl">
+                                                <nz-input-group>
+                                                    <nz-date-picker formControlName="birthday" nzPlaceHolder="Birthday"
+                                                        [nzFormat]="dateFormat" style="width:100%;">
+                                                    </nz-date-picker>
+                                                </nz-input-group>
+                                                <ng-template #bErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Select a Date
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <!--Email-->
+                                <div nz-col nzSpan="24" style="display: flex">
+                                    <div nz-col nzSpan="11">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="email" class="white-bold">
+                                                Email
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="eErrorTpl">
+                                                <input nz-input placeholder="Input Your Email" formControlName="email"
+                                                    type="email" />
+                                                <ng-template #eErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your Email!
+                                                    </ng-container>
+                                                    <ng-container *ngIf="control.hasError('email')">
+                                                        Please Input A Valid Email!
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="1"></div>
+                                    <!-- Phone Number-->
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" nzFor="phone_number" class="white-bold">
+                                                Phone Number
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="pnErrorTpl">
+                                                <input [type]="'text'" nz-input formControlName="phone_number"
+                                                    prefix="(+60) " mask="000000000" style="width:100%"
+                                                    [showMaskTyped]=true />
+                                                <ng-template #pnErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your Phone Number!
+                                                    </ng-container>
+                                                    <ng-container *ngIf="control.hasError('pattern')">
+                                                        Please Input A Valid Phone Number!
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <div nz-col nzSpan="24" style="text-align: right;">
+                                    <button nz-button nzType="primary" (click)="submitBasicInfoForm()"
+                                        style="font-weight: bold; " [disabled]="!editBasicInfoForm.valid">
+                                        Update User Info
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </nz-card>
+                        <nz-divider nz-col nzSpan="24" style="width: 90vw; text-align: center; 
+                            margin-bottom: 5px; border-top-color: #fff;">
+                        </nz-divider>
+                        <!--Contact-Info Form-->
+                        <div nz-col nzSpan="24">
+                            <h4 class="white-bold" style="font-size: 16px; margin-bottom: 20px;">
+                                Address Info <i nz-icon nzType="mail" nzTheme="outline"></i>
+                            </h4>
+                        </div>
+                        <nz-card style="background: transparent; border: 2px solid #fff; margin: auto;">
+                            <ng-container [formGroup]="editContactInfoForm">
+                                <!--Address-->
+                                <div nz-col nzSpan="24">
+                                    <nz-form-item>
+                                        <nz-form-label nz-col nzSpan="24" class="white-bold" nzFor="address">
+                                            Address
+                                        </nz-form-label>
+                                        <nz-form-control nzHasFeedback [nzErrorTip]="aErrorTpl">
+                                            <input nz-input placeholder="Input Your Address" formControlName="address"
+                                                type="text" />
+                                            <ng-template #aErrorTpl let-control>
+                                                <ng-container *ngIf="control.hasError('required')">
+                                                    Please Input Your Address!
+                                                </ng-container>
+                                            </ng-template>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col nzSpan="24" style="display: flex;">
+                                    <!--Postcode-->
+                                    <div nz-col nzSpan="10">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" class="white-bold" nzFor="postcode">
+                                                Postcode
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="pcErrorTpl">
+                                                <input nz-input placeholder="Input Your Postcode"
+                                                    formControlName="postcode" type="text" />
+                                                <ng-template #pcErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your Postcode!
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <!--State-->
+                                    <div nz-col nzSpan="1"></div>
+                                    <div nz-col nzSpan="13">
+                                        <nz-form-item>
+                                            <nz-form-label nz-col nzSpan="24" class="white-bold" nzFor="state">
+                                                State
+                                            </nz-form-label>
+                                            <nz-form-control nzHasFeedback [nzErrorTip]="sErrorTpl">
+                                                <input nz-input placeholder="Input Your State" formControlName="state"
+                                                    type="text" />
+                                                <ng-template #sErrorTpl let-control>
+                                                    <ng-container *ngIf="control.hasError('required')">
+                                                        Please Input Your State!
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <!--City-->
+                                <div nz-col nzSpan="24">
+                                    <nz-form-item>
+                                        <nz-form-label nz-col nzSpan="24" class="white-bold" nzFor="city">
+                                            City
+                                        </nz-form-label>
+                                        <nz-form-control nzHasFeedback [nzErrorTip]="cErrorTpl">
+                                            <input nz-input placeholder="Input Your City" formControlName="city"
+                                                type="text" />
+                                            <ng-template #cErrorTpl let-control>
+                                                <ng-container *ngIf="control.hasError('required')">
+                                                    Please Input Your City!
+                                                </ng-container>
+                                            </ng-template>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col nzSpan="24" style="text-align: right;">
+                                    <button nz-button nzType="primary" (click)="submitContactInfoForm()"
+                                        style="font-weight: bold; " [disabled]="!editContactInfoForm.valid">
+                                        Update Address Info
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </nz-card>
+                        <nz-back-top [nzTarget]="backTopTarget2" [nzVisibilityHeight]="100" class="backTopBtn2">
+                        </nz-back-top>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+//Search Funtion
+.search-box {
+    padding: 8px;
+  }
+
+  .search-box input {
+    width: 188px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .search-box button {
+    width: 90px;
+  }
+
+  .search-button {
+    margin-right: 8px;
+  }
+
+//Filters
+[nz-radio] {
+  display: block;
+  height: 32px;
+  line-height: 32px;
+}
+
+.filter-btn:hover {
+  color: #fff !important;
+}
+
+//Table CSS
+::ng-deep li.ant-pagination-item.ant-pagination-item-active.ng-star-inserted {
+  background: #007FFF;
+}
+
+::ng-deep a.ng-star-inserted, ::ng-deep button.ant-pagination-item-link.ng-star-inserted, ::ng-deep span.ant-pagination-item-ellipsis {
+ color: #fff !important;
+}
+
+::ng-deep .ant-table-small .ant-table-thead > tr > th {
+  background: #002D62 !important;
+}
+
+::ng-deep .ant-table-thead > tr > th {
+  color: #fff !important;
+}
+
+::ng-deep table {
+  background: #001529;
+  color:#fff;
+  text-align: center !important;
+}
+
+::ng-deep tr.ant-table-row.ng-star-inserted:hover {
+  color:  #001529;
+  font-weight: bold;
+}
+
+::ng-deep nz-table-title-footer.ant-table-footer.ng-star-inserted {
+  background: #001529;
+  color: #fff;
+}
+
+//Date
+::ng-deep span.ant-breadcrumb-separator.ng-star-inserted {
+  color: #fff;
+}
+
+::ng-deep .ant-picker-date-panel .ant-picker-content th, ::ng-deep .ant-picker-cell .ant-picker-cell-inner {
+  color: #fff;
+}
+
+::ng-deep .ant-picker-cell .ant-picker-cell-inner:hover {
+  color: #001529;
+}
+
+//Others
+.white-bold {
+  font-weight: bold;
+  color: #fff;
+}
+
+::ng-deep .ant-form-item-label > label {
+  color: #fff;
+}

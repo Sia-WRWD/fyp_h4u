@@ -1,0 +1,139 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Dashboard</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">View Ongoing Consultation and Web Statistics</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span style="color: #fff;">Dashboard</span>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff; margin-bottom: 5px;"></nz-divider>
+
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <div class="greeting-card">
+            <div class="greeting-text">
+                Welcome Back
+                <a style="color: #fff; font-weight: bold;" (click)="directProfile()">
+                    JcN@69!
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div nz-row style="margin-top: 20px;">
+    <div nz-col nzSpan="24" style="display: flex;">
+        <!--Ongoing Consultation-->
+        <div nz-col nzSpan="19" class="ongoing-consultation">
+            <div nz-col nzSpan="24">
+                <h3 style="color: #1da1f2; margin-left: 10px; font-weight: bold;">
+                    ONGOING CONSULTATION LIST
+                </h3>
+                <nz-divider style="border-top-color: #fff; margin: 0;"></nz-divider>
+                <nz-list [nzDataSource]="listOfDisplayData" [nzItemLayout]="'horizontal'">
+                    <ng-container *ngFor="let consultation of listOfDisplayData; let i = index">
+                        <nz-list-item [nzActions]="[viewAction]">
+                            <ng-template #viewAction>
+                                <button nz-button nzType="text" (click)="openCInfo(i)"
+                                    style="border: 1px solid #fff; color: #fff; font-weight: bold;">
+                                    View Info
+                                </button>
+                            </ng-template>
+                            <nz-list-item-meta [nzTitle]="consultationTitle" nzDescription="Ongoing"
+                                [nzAvatar]="ongoingIcon">
+                                <ng-template #consultationTitle>
+                                    <p>{{ consultation.consultation_consultor }} - {{
+                                        consultation.consultation_consultee }}</p>
+                                </ng-template>
+                                <ng-template #ongoingIcon>
+                                    <i nz-icon nzType="clock-circle" nzTheme="outline" style="color: #fff;"></i>
+                                </ng-template>
+                            </nz-list-item-meta>
+                        </nz-list-item>
+                    </ng-container>
+                </nz-list>
+                <!--Drawer-->
+                <nz-drawer [nzVisible]="infoDrawerVisible" [nzWidth]="640" [nzClosable]="false"
+                    (nzOnClose)="closeCInfo()">
+                    <ng-container *nzDrawerContent>
+                        <ng-container *ngFor="let sconsultation of listOfSingleDisplayData">
+                            <div style="background: #fff; height: 93vh;">
+                                <div style="padding: 20px;">
+                                    <nz-descriptions [nzColumn]="2" nzTitle="Appointment Details">
+                                        <nz-descriptions-item nzTitle="Consultor" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_consultor}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Consultee" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_consultee}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Date" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_date | date:"dd-MM-yyyy"}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Time" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_time}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Type" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_type}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Platform" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_platform}}</h5>
+                                        </nz-descriptions-item>
+                                        <nz-descriptions-item nzTitle="Status" [nzSpan]="1" class="black-bold">
+                                            <h6 style="font-size: 16px; font-weight: bold; color: #FF0000;">
+                                                {{ sconsultation.consultation_status }}
+                                            </h6>
+                                        </nz-descriptions-item>
+                                    </nz-descriptions>
+                                    <nz-descriptions [nzColumn]="1" nzTitle="Others">
+                                        <nz-descriptions-item nzTitle="Comment" [nzSpan]="1" class="black-bold">
+                                            <h5>{{ sconsultation.consultation_comment}}</h5>
+                                        </nz-descriptions-item>
+                                    </nz-descriptions>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </nz-drawer>
+            </div>
+        </div>
+        <nz-divider nzType="vertical" style="border-left-color: #fff; height: 53vh;"></nz-divider>
+        <!--Statistics-->
+        <div nz-col nzSpan="5">
+            <div nz-col nzSpan="23" style="text-align: center;">
+                <nz-card style="margin-bottom: 10px; width: 230px;">
+                    <nz-statistic [nzValue]="totalUsers" [nzTitle]="totalUsersTitle">
+                        <ng-template #totalUsersTitle>
+                            Total Users <i nz-icon nzType="user" nzTheme="outline"></i>
+                        </ng-template>
+                    </nz-statistic>
+                </nz-card>
+                <nz-card style="margin-bottom: 10px; width: 230px;">
+                    <nz-statistic [nzValue]="totalConsultation" [nzTitle]="totalConsultationTitle">
+                        <ng-template #totalConsultationTitle>
+                            Total Consultation <i nz-icon nzType="team" nzTheme="outline"></i>
+                        </ng-template>
+                    </nz-statistic>
+                </nz-card>
+                <nz-card style="width: 230px;">
+                    <nz-statistic [nzValue]="totalOngoingConsultation" [nzTitle]="totalOngoingConsultationTitle">
+                        <ng-template #totalOngoingConsultationTitle>
+                            Ongoing Consultation <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                        </ng-template>
+                    </nz-statistic>
+                </nz-card>
+            </div>
+        </div>
+    </div>
+</div>

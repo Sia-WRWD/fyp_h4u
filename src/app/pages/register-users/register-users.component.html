@@ -1,0 +1,314 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Register Users</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">Add New Users, Admins & Consultors</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span style="color: aqua; cursor: pointer; font-weight: bold;" (click)="back2Manage()">
+                            Manage Users
+                        </span>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <span style="color: #fff;">Register Users</span>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff;"></nz-divider>
+
+<div nz-row style="margin-bottom: 10px;">
+    <div nz-col nzSpan="18" style="margin: auto; padding: 10px 10px; border: 2px solid #fff; padding-left: 39px;">
+        <ng-container [formGroup]="registrationForm">
+            <div nz-col nzSpan="24" style="display: flex;">
+                <!--Username-->
+                <div nz-col nzSpan="11">
+                    <nz-form-item>
+                        <nz-form-label nzFor="username" nz-col nzSpan="24" class="white-bold">
+                            Username
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="uErrorTpl">
+                            <input nz-input placeholder="Input Username" formControlName="username" type="text" 
+                                maxlength="8"/>
+                            <ng-template #uErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Username!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <!--Email-->
+                <div nz-col nzSpan="11">
+                    <nz-form-item>
+                        <nz-form-label nzFor="email" nz-col nzSpan="24" class="white-bold">
+                            Email
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="eErrorTpl">
+                            <input nz-input type="email" formControlName="email" placeholder="Input Email" />
+                            <ng-template #eErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Email!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('email')">
+                                    Please Input A Valid Email!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="12">
+                    <!--Password-->
+                    <nz-form-item>
+                        <nz-form-label nzFor="password" nz-col nzSpan="24" class="white-bold">
+                            Password
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="pErrorTpl">
+                            <input nz-input type="password" formControlName="password" placeholder="Input Password" />
+                            <ng-template #pErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Password!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="10">
+                    <!--Gender-->
+                    <nz-form-item>
+                        <nz-form-label nzFor="gender" nz-col nzSpan="24" class="white-bold">
+                            Gender
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="gErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="gender" nzShowSearch nzPlaceHolder="Choose Your Gender"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="m" nzLabel="Male"></nz-option>
+                                    <nz-option nzValue="f" nzLabel="Female"></nz-option>
+                                    <nz-option nzValue="o" nzLabel="Other"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #gErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A Gender!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="11">
+                    <!--First Name-->
+                    <nz-form-item>
+                        <nz-form-label nzFor="first_name" nz-col nzSpan="24" class="white-bold">
+                            First Name
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="fnErrorTpl">
+                            <input nz-input formControlName="first_name" placeholder="Input First Name" type="text" />
+                            <ng-template #fnErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your First Name!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    Please Input A Valid First Name!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="11">
+                    <!--Last Name-->
+                    <nz-form-item>
+                        <nz-form-label nzFor="last_name" nz-col nzSpan="24" class="white-bold">
+                            Last Name
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="lnErrorTpl">
+                            <input nz-input formControlName="last_name" placeholder="Input Last Name" type="text" />
+                            <ng-template #lnErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Last Name!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    Please Input A Valid Last Name!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="7">
+                    <!--Phone Number-->
+                    <nz-form-item>
+                        <nz-form-label nz-col nzSpan="24" nzFor="phone_number" class="white-bold">
+                            Phone Number
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="pnErrorTpl">
+                            <input [type]="'text'" nz-input formControlName="phone_number" prefix="(+60) "
+                                mask="000000000" style="width:100%" [showMaskTyped]=true />
+                            <ng-template #pnErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Phone Number!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    Please Input A Valid Phone Number!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="7">
+                    <!--Role-->
+                    <nz-form-item>
+                        <nz-form-label nzFor="role" nz-col nzSpan="24" class="white-bold">
+                            Role
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="rErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="role" nzShowSearch nzPlaceHolder="Assign a Role"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+                                    <nz-option nzValue="consultor" nzLabel="Consultor"></nz-option>
+                                    <nz-option nzValue="user" nzLabel="User"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #rErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A Role!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="7">
+                    <nz-form-item>
+                        <nz-form-label nz-col nzSpan="24" nzFor="birthday" class="white-bold">
+                            Birthday
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="bErrorTpl">
+                            <nz-input-group>
+                                <nz-date-picker formControlName="birthday" nzPlaceHolder="Birthday"
+                                    [nzFormat]="dateFormat" style="width:100%">
+                                </nz-date-picker>
+                            </nz-input-group>
+                            <ng-template #bErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select a Date
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="display: flex;">
+                <!--Address-->
+                <div nz-col nzSpan="13">
+                    <nz-form-item>
+                        <nz-form-label nzFor="address" nz-col nzSpan="24" class="white-bold">
+                            Address
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="aErrorTpl">
+                            <input nz-input formControlName="address" placeholder="Input Address" type="text" />
+                            <ng-template #aErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Address!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <!--Postcode-->
+                <div nz-col nzSpan="9">
+                    <nz-form-item>
+                        <nz-form-label nzFor="postcode" nz-col nzSpan="24" class="white-bold">
+                            Postcode
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="pErrorTpl">
+                            <input nz-input formControlName="postcode" placeholder="Input Postcode" type="text" />
+                            <ng-template #pErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your Postcode!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="display: flex;">
+                <!--City-->
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzFor="city" nz-col nzSpan="24" class="white-bold">
+                            City
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="cErrorTpl">
+                            <input nz-input formControlName="city" placeholder="Input City" type="text" />
+                            <ng-template #cErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Your City!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <!--State-->
+                <div nz-col nzSpan="10">
+                    <nz-form-item>
+                        <nz-form-label nzFor="state" nz-col nzSpan="24" class="white-bold">
+                            State
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="sErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="state" nzShowSearch nzPlaceHolder="Select a State"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="Kuala Lumpur" nzLabel="Kuala Lumpur"></nz-option>
+                                    <nz-option nzValue="Selangor" nzLabel="Selangor"></nz-option>
+                                    <nz-option nzValue="Sabah" nzLabel="Sabah"></nz-option>
+                                    <nz-option nzValue="Sarawak" nzLabel="Sarawak"></nz-option>
+                                    <nz-option nzValue="Johor" nzLabel="Johor"></nz-option>
+                                    <nz-option nzValue="Kedah" nzLabel="Kedah"></nz-option>
+                                    <nz-option nzValue="Negeri Sembilan" nzLabel="Negeri Sembilan"></nz-option>
+                                    <nz-option nzValue="Penang" nzLabel="Penang"></nz-option>
+                                    <nz-option nzValue="Pahang" nzLabel="Pahang"></nz-option>
+                                    <nz-option nzValue="Perlis" nzLabel="Perlis"></nz-option>
+                                    <nz-option nzValue="Kelantan" nzLabel="Kelantan"></nz-option>
+                                    <nz-option nzValue="Terengganu" nzLabel="Terengganu"></nz-option>
+                                    <nz-option nzValue="Malacca" nzLabel="Malacca"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #sErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A State!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="float: right; margin-right: 30px; margin-bottom: 10px;">
+                <button nz-button nzType="primary" (click)="registerUser()" [disabled]="!registrationForm.valid"
+                    style="font-weight: bold;">
+                    REGISTER USER <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>

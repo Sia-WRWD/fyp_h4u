@@ -1,0 +1,202 @@
+<div nz-row>
+    <div nz-col nzSpan="24" style="align-items: baseline;">
+        <nz-page-header>
+            <nz-page-header-title>
+                <span style="font-size: 25px; color: #fff">Add Consultation</span>
+            </nz-page-header-title>
+            <nz-page-header-subtitle>
+                <span style="color: #fff;">Add New Consultation Slots</span>
+            </nz-page-header-subtitle>
+            <nz-page-header-extra style="display: flex; align-items: center;">
+                <nz-breadcrumb style="color: #fff;">
+                    <nz-breadcrumb-item>
+                        <span style="color: aqua; cursor: pointer; font-weight: bold;" (click)="back2Manage()">
+                            Manage Consultation
+                        </span>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <span style="color: #fff;">Add Consultation</span>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+</div>
+
+<nz-divider style="margin-top: 0; border-top-color: #fff;"></nz-divider>
+
+<div nz-row style="margin-bottom: 10px;">
+    <div nz-col nzSpan="22" style="margin: auto; border: 2px solid #fff; padding: 20px 20px 20px 20px;">
+        <ng-container [formGroup]="addConsultationForm">
+            <!--Date & Time-->
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nz-col nzSpan="24" nzFor="date" class="white-bold">
+                            Date
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="dErrorTpl">
+                            <nz-input-group>
+                                <nz-date-picker formControlName="date" nzPlaceHolder="Input Date"
+                                    [nzFormat]="dateFormat" style="width:100%">
+                                </nz-date-picker>
+                            </nz-input-group>
+                            <ng-template #dErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select a Date
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="11">
+                    <nz-form-item>
+                        <nz-form-label nzFor="time" nz-col nzSpan="24" class="white-bold">
+                            Time
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="tErrorTpl">
+                            <input nz-input type="text" formControlName="time" placeholder="Input Time (HH:mm:ss)" />
+                            <ng-template #tErrorTpl let-control>
+                                Please Choose a Time!
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!--Consultor & Consultee-->
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzFor="consultor" nz-col nzSpan="24">
+                            Consultor
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="ctorErrorTpl">
+                            <input nz-input type="text" formControlName="consultor" placeholder="Input Consultor" />
+                            <ng-template #ctorErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Consultor's Name!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="11">
+                    <nz-form-item>
+                        <nz-form-label nzFor="consultee" nz-col nzSpan="24">
+                            Consultee
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="cteeErrorTpl">
+                            <input nz-input type="text" formControlName="consultee" placeholder="Input Consultee" />
+                            <ng-template #cteeErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Consultee's Name!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!--Type, Platform, Status-->
+            <div nz-col nzSpan="24" style="display: flex;">
+                <div nz-col nzSpan="8">
+                    <nz-form-item>
+                        <nz-form-label nzFor="type" nz-col nzSpan="24" class="white-bold">
+                            Type
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="typeErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="type" nzShowSearch nzPlaceHolder="Choose Your Type"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="Mental Health" nzLabel="Mental Health"></nz-option>
+                                    <nz-option nzValue="Fitness" nzLabel="Fitness"></nz-option>
+                                    <nz-option nzValue="Academic" nzLabel="Academic"></nz-option>
+                                    <nz-option nzValue="Life" nzLabel="Life"></nz-option>
+                                    <nz-option nzValue="Career" nzLabel="Career"></nz-option>
+                                    <nz-option nzValue="Further Studies" nzLabel="Further Studies"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #typeErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A Type!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="7">
+                    <nz-form-item>
+                        <nz-form-label nzFor="platform" nz-col nzSpan="24" class="white-bold">
+                            Platform
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="pErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="platform" nzShowSearch nzPlaceHolder="Choose Platform"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="discord" nzLabel="Discord"></nz-option>
+                                    <nz-option nzValue="teams" nzLabel="Teans"></nz-option>
+                                    <nz-option nzValue="zoom" nzLabel="Zoom"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #pErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A Platform!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="1"></div>
+                <div nz-col nzSpan="7">
+                    <nz-form-item>
+                        <nz-form-label nzFor="status" nz-col nzSpan="24" class="white-bold">
+                            Status
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="statusErrorTpl">
+                            <nz-input-group>
+                                <nz-select formControlName="status" nzShowSearch nzPlaceHolder="Choose Status"
+                                    nzAllowClear style="width:100%; resize: none;">
+                                    <nz-option nzValue="completed" nzLabel="Completed"></nz-option>
+                                    <nz-option nzValue="ongoing" nzLabel="Ongoing"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                            <ng-template #statusErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Select A Status!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <!--Comment-->
+            <div nz-col nzSpan="24">
+                <div nz-col nzSpan="24">
+                    <nz-form-item>
+                        <nz-form-label nzFor="comment" nz-col nzSpan="24">
+                            Comment
+                        </nz-form-label>
+                        <nz-form-control nzHasFeedback [nzErrorTip]="comErrorTpl">
+                            <textarea nz-input formControlName="comment" placeHolder="Input Comment"
+                                [nzAutosize]="{ minRows: 5, maxRows: 10 }" style="resize: none;">
+                            </textarea>
+                            <ng-template #comErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please Input Comment!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="24" style="float: right;">
+                <button nz-button nzType="primary" (click)="addConsultation()" 
+                    [disabled]="!addConsultationForm.valid">
+                    ADD CONSULTATION
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>
